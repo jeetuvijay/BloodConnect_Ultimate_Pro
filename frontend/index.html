@@ -1,0 +1,313 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BloodConnect</title>
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 fade-in">
+
+<nav class="bg-red-600 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto max-w-7xl flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="pages/about.html" class="hover:text-red-200 transition">About</a>
+      <a href="#how-it-works" class="hover:text-red-200 transition">How It Works</a>
+      <a href="pages/camps.html" class="hover:text-red-200 transition">Donation Camps</a>
+      <a href="pages/news.html" class="hover:text-red-200 transition">News</a>
+      <a href="#search" class="hover:text-red-200 transition">Find Blood</a>
+      <a href="pages/login.html" class="hover:text-red-200 transition">Login</a>
+      <a href="pages/register.html" class="bg-white text-red-600 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition">Register</a>
+      <a href="pages/hospital-register.html" class="border border-white text-white px-4 py-2 rounded-full font-semibold hover:bg-white hover:text-red-600 transition">Hospital Register</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-600 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-700 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="pages/about.html" class="block px-4 py-2 hover:bg-red-600 transition">About</a>
+    <a href="#how-it-works" class="block px-4 py-2 hover:bg-red-600 transition">How It Works</a>
+    <a href="pages/camps.html" class="block px-4 py-2 hover:bg-red-600 transition">Donation Camps</a>
+    <a href="pages/news.html" class="block px-4 py-2 hover:bg-red-600 transition">News</a>
+    <a href="#search" class="block px-4 py-2 hover:bg-red-600 transition">Find Blood</a>
+    <a href="pages/login.html" class="block px-4 py-2 hover:bg-red-600 transition">Login</a>
+    <a href="pages/register.html" class="block px-4 py-2 bg-white text-red-600 font-semibold rounded mx-4 my-2 text-center">Register</a>
+    <a href="pages/hospital-register.html" class="block px-4 py-2 border border-white text-white font-semibold rounded mx-4 my-2 text-center hover:bg-white hover:text-red-600">Hospital Register</a>
+  </div>
+</nav>
+
+<section class="bg-red-600 text-white text-center py-32 relative mt-16 min-h-screen flex items-center">
+  <div class="container mx-auto max-w-7xl px-4 flex flex-col md:flex-row items-center">
+    <div class="md:w-1/2">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">Save Lives. Donate Blood.</h1>
+      <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">Real-Time Blood Matching Platform Connecting Donors, Hospitals & Recipients</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="pages/register.html" class="btn-primary">Become a Donor</a>
+        <a href="pages/hospital-register.html" class="btn-secondary">Register Hospital</a>
+      </div>
+    </div>
+    <div class="md:w-1/2 mt-8 md:mt-0 px-4">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQjQlaVrXasX9Wh4ppczGjY7_Kb4zmsTZbPA&s" alt="Blood donation" class="rounded-xl shadow-2xl mx-auto max-w-full h-auto object-cover" loading="lazy" style="max-height: 500px;">
+    </div>
+  </div>
+  <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-100 to-transparent"></div>
+</section>
+
+<section id="search" class="py-16 bg-white">
+  <div class="container mx-auto max-w-7xl px-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Find Blood Donors Near You</h2>
+      <div class="bg-gray-50 p-8 rounded-xl shadow-lg">
+        <form class="grid grid-cols-1 md:grid-cols-4 gap-4" id="bloodSearchForm">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Blood Type</label>
+            <select id="searchBloodType" class="form-input">
+              <option value="">Any Type</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+            <input type="text" id="searchLocation" placeholder="City, State" class="form-input">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Urgency</label>
+            <select id="searchUrgency" class="form-input">
+              <option value="">Any</option>
+              <option value="emergency">Emergency</option>
+              <option value="urgent">Urgent</option>
+              <option value="normal">Normal</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="btn-primary w-full">
+              <i class="fas fa-search mr-2"></i>Search
+            </button>
+          </div>
+        </form>
+        <div id="searchResults" class="mt-6 hidden">
+          <h3 class="text-xl font-semibold mb-4">Available Donors</h3>
+          <div class="space-y-4" id="resultsList">
+            <!-- Results will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="py-16 bg-white">
+  <div class="container mx-auto max-w-7xl px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">About BloodConnect</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">BloodConnect is a revolutionary platform that bridges the gap between blood donors and those in need. Our real-time matching system ensures that every drop of blood reaches where it's needed most.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="text-center p-6 card">
+      <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" width="80" height="80" alt="Blood donation" class="w-16 h-16 mx-auto mb-4 rounded-full object-cover" loading="lazy">
+        <h3 class="text-xl md:text-2xl font-semibold mb-2">Save Lives</h3>
+        <p class="text-gray-600">Every donation can save up to 3 lives. Join our community of heroes.</p>
+      </div>
+      <div class="text-center p-6 card">
+        <img src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" width="80" height="80" alt="Real-time matching" class="w-16 h-16 mx-auto mb-4 rounded-full object-cover" loading="lazy">
+        <h3 class="text-xl md:text-2xl font-semibold mb-2">Real-Time Matching</h3>
+        <p class="text-gray-600">Advanced algorithms match donors with recipients instantly.</p>
+      </div>
+      <div class="text-center p-6 card">
+        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" width="80" height="80" alt="Global network" class="w-16 h-16 mx-auto mb-4 rounded-full object-cover" loading="lazy">
+        <h3 class="text-xl md:text-2xl font-semibold mb-2">Global Network</h3>
+        <p class="text-gray-600">Connect with donors and hospitals worldwide through our platform.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how-it-works" class="py-16 bg-gray-100">
+  <div class="container mx-auto max-w-7xl px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">How It Works</h2>
+      <p class="text-lg text-gray-600">Simple steps to make a difference</p>
+    </div>
+    <div class="grid md:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+        <h3 class="text-xl font-semibold mb-2">Register</h3>
+        <p class="text-gray-600">Create your account and provide your blood type and location.</p>
+      </div>
+      <div class="text-center">
+        <div class="bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+        <h3 class="text-xl font-semibold mb-2">Get Matched</h3>
+        <p class="text-gray-600">Our system matches you with nearby hospitals in need.</p>
+      </div>
+      <div class="text-center">
+        <div class="bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+        <h3 class="text-xl font-semibold mb-2">Donate</h3>
+        <p class="text-gray-600">Visit the hospital and make your life-saving donation.</p>
+      </div>
+      <div class="text-center">
+        <div class="bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">4</div>
+        <h3 class="text-xl font-semibold mb-2">Save Lives</h3>
+        <p class="text-gray-600">Your donation goes directly to those who need it most.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto max-w-7xl px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Impact</h2>
+      <p class="text-lg text-gray-600">Numbers that matter</p>
+    </div>
+    <div class="grid md:grid-cols-4 gap-8 text-center">
+      <div>
+        <div class="text-5xl font-bold text-red-600 mb-2">10,000+</div>
+        <p class="text-gray-600">Lives Saved</p>
+      </div>
+      <div>
+        <div class="text-5xl font-bold text-red-600 mb-2">5,000+</div>
+        <p class="text-gray-600">Active Donors</p>
+      </div>
+      <div>
+        <div class="text-5xl font-bold text-red-600 mb-2">500+</div>
+        <p class="text-gray-600">Partner Hospitals</p>
+      </div>
+      <div>
+        <div class="text-5xl font-bold text-red-600 mb-2">24/7</div>
+        <p class="text-gray-600">Support Available</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto max-w-7xl px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">What People Say</h2>
+      <p class="text-lg text-gray-600">Hear from our donors and recipients</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="p-6 card">
+        <div class="flex items-center mb-4">
+          <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80" width="48" height="48" alt="Sarah Johnson" class="w-12 h-12 rounded-full object-cover" loading="lazy">
+          <div class="ml-4">
+            <h4 class="font-semibold">Sarah Johnson</h4>
+            <p class="text-gray-600 text-sm">Regular Donor</p>
+          </div>
+        </div>
+        <p class="text-gray-600 italic">"BloodConnect made donating blood so easy. I can schedule donations at my convenience and know I'm helping save lives."</p>
+        <div class="flex text-yellow-400 mt-4">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+      </div>
+      <div class="p-6 card">
+        <div class="flex items-center mb-4">
+          <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80" width="48" height="48" alt="Dr. Michael Chen" class="w-12 h-12 rounded-full object-cover" loading="lazy">
+          <div class="ml-4">
+            <h4 class="font-semibold">Dr. Michael Chen</h4>
+            <p class="text-gray-600 text-sm">City General Hospital</p>
+          </div>
+        </div>
+        <p class="text-gray-600 italic">"In emergency situations, BloodConnect helps us find compatible donors quickly. It's a lifesaver for our patients."</p>
+        <div class="flex text-yellow-400 mt-4">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+      </div>
+      <div class="p-6 card">
+        <div class="flex items-center mb-4">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80" width="48" height="48" alt="Emma Davis" class="w-12 h-12 rounded-full object-cover" loading="lazy">
+          <div class="ml-4">
+            <h4 class="font-semibold">Emma Davis</h4>
+            <p class="text-gray-600 text-sm">Recipient</p>
+          </div>
+        </div>
+        <p class="text-gray-600 italic">"I needed blood urgently after an accident. BloodConnect connected me with a donor within hours. Thank you for saving my life!"</p>
+        <div class="flex text-yellow-400 mt-4">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-red-50">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-4xl font-bold text-gray-800 mb-4">Ready to Make a Difference?</h2>
+    <p class="text-lg text-gray-600 mb-8">Join thousands of donors who are saving lives every day.</p>
+    <a href="pages/register.html" class="btn-primary text-lg">Start Donating Today</a>
+  </div>
+</section>
+
+<footer class="bg-red-700 text-white">
+  <div class="container mx-auto max-w-7xl px-4 py-12">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <h3 class="text-xl font-semibold mb-4">🩸 BloodConnect</h3>
+        <p class="text-red-100 mb-4">Connecting donors with those in need, one drop at a time.</p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="text-red-200 hover:text-white transition">Home</a></li>
+          <li><a href="pages/about.html" class="text-red-200 hover:text-white transition">About</a></li>
+          <li><a href="#how-it-works" class="text-red-200 hover:text-white transition">How It Works</a></li>
+          <li><a href="pages/camps.html" class="text-red-200 hover:text-white transition">Donation Camps</a></li>
+          <li><a href="pages/news.html" class="text-red-200 hover:text-white transition">News & Blog</a></li>
+          <li><a href="#search" class="text-red-200 hover:text-white transition">Find Blood</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Support</h3>
+        <ul class="space-y-2">
+          <li><a href="pages/contact.html" class="text-red-200 hover:text-white transition">Contact Us</a></li>
+          <li><a href="pages/faq.html" class="text-red-200 hover:text-white transition">Help Center</a></li>
+          <li><a href="#" class="text-red-200 hover:text-white transition">Emergency Hotline</a></li>
+          <li><a href="pages/privacy-policy.html" class="text-red-200 hover:text-white transition">Privacy Policy</a></li>
+          <li><a href="pages/terms-of-service.html" class="text-red-200 hover:text-white transition">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Get Started</h3>
+        <ul class="space-y-2">
+          <li><a href="pages/register.html" class="text-red-200 hover:text-white transition">Become a Donor</a></li>
+          <li><a href="pages/login.html" class="text-red-200 hover:text-white transition">Hospital Login</a></li>
+          <li><a href="pages/hospital-register.html" class="text-red-200 hover:text-white transition">Partner With Us</a></li>
+          <li><a href="#" class="text-red-200 hover:text-white transition">Download App</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-red-600 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p>© 2026 BloodConnect. All rights reserved.</p>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <a href="pages/terms-of-service.html" class="text-red-200 hover:text-white transition text-sm">Terms of Service</a>
+        <a href="pages/privacy-policy.html" class="text-red-200 hover:text-white transition text-sm">Privacy Policy</a>
+        <a href="#" class="text-red-200 hover:text-white transition text-sm">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blood Requests Management - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-50 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="admin-dashboard.html" class="hover:text-red-200 transition">Admin</a>
+      <a href="donor-dashboard.html" class="hover:text-red-200 transition">Donor</a>
+      <a href="hospital-dashboard.html" class="hover:text-red-200 transition">Hospital</a>
+      <a href="analytics.html" class="hover:text-red-200 transition">Analytics</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="admin-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Admin</a>
+    <a href="donor-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Donor</a>
+    <a href="hospital-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Hospital</a>
+    <a href="analytics.html" class="block px-4 py-2 hover:bg-red-600 transition">Analytics</a>
+  </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8 mt-16">
+  <!-- Header -->
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Blood Requests Management</h1>
+        <p class="text-gray-600">Manage incoming blood requests and coordinate with donors</p>
+      </div>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition" onclick="createNewRequest()">
+          <i class="fas fa-plus mr-2"></i>New Request
+        </button>
+        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition" onclick="exportRequests()">
+          <i class="fas fa-download mr-2"></i>Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+        <input type="text" id="searchInput" placeholder="Search requests..." class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Blood Type</label>
+        <select id="bloodTypeFilter" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="">All Types</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+        <select id="statusFilter" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="matched">Matched</option>
+          <option value="fulfilled">Fulfilled</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Urgency</label>
+        <select id="urgencyFilter" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="">All Levels</option>
+          <option value="critical">Critical</option>
+          <option value="urgent">Urgent</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition" onclick="clearFilters()">
+        Clear Filters
+      </button>
+      <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition" onclick="applyFilters()">
+        Apply Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="flex items-center">
+        <div class="bg-red-100 p-3 rounded-full mr-4">
+          <i class="fas fa-clock text-red-600 text-xl"></i>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-800" id="pendingRequests">12</div>
+          <div class="text-sm text-gray-600">Pending Requests</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="flex items-center">
+        <div class="bg-blue-100 p-3 rounded-full mr-4">
+          <i class="fas fa-handshake text-blue-600 text-xl"></i>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-800" id="matchedRequests">8</div>
+          <div class="text-sm text-gray-600">Matched</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="flex items-center">
+        <div class="bg-green-100 p-3 rounded-full mr-4">
+          <i class="fas fa-check-circle text-green-600 text-xl"></i>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-800" id="fulfilledRequests">45</div>
+          <div class="text-sm text-gray-600">Fulfilled</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="flex items-center">
+        <div class="bg-yellow-100 p-3 rounded-full mr-4">
+          <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-800" id="criticalRequests">3</div>
+          <div class="text-sm text-gray-600">Critical</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Requests Table -->
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Request Details</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blood Type</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urgency</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200" id="requestsTableBody">
+          <!-- Request rows will be populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-700">
+          Showing <span id="showingStart">1</span> to <span id="showingEnd">10</span> of <span id="totalRequests">50</span> requests
+        </div>
+        <div class="flex gap-2">
+          <button id="prevPage" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 transition" onclick="changePage(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span id="currentPage" class="px-3 py-1 bg-red-600 text-white rounded">1</span>
+          <button id="nextPage" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 transition" onclick="changePage(1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Request Details Modal -->
+<div id="requestModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Request Details</h2>
+          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+
+        <div id="requestDetails">
+          <!-- Request details will be populated by JavaScript -->
+        </div>
+
+        <div class="flex gap-4 mt-6">
+          <button id="matchDonorsBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+            <i class="fas fa-search mr-2"></i>Find Donors
+          </button>
+          <button id="fulfillRequestBtn" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+            <i class="fas fa-check mr-2"></i>Mark Fulfilled
+          </button>
+          <button id="cancelRequestBtn" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition">
+            <i class="fas fa-times mr-2"></i>Cancel Request
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script>
+// Mock requests data
+const mockRequests = [
+  {
+    id: 1,
+    patientId: "P2024001",
+    bloodType: "O-",
+    units: 2,
+    urgency: "critical",
+    status: "pending",
+    date: "2024-03-15",
+    hospital: "City General Hospital",
+    reason: "Emergency Surgery",
+    contactPerson: "Dr. Sarah Johnson",
+    phone: "+1 (555) 123-4567",
+    notes: "Patient requires immediate transfusion"
+  },
+  {
+    id: 2,
+    patientId: "P2024002",
+    bloodType: "A+",
+    units: 1,
+    urgency: "urgent",
+    status: "matched",
+    date: "2024-03-14",
+    hospital: "Metropolitan Hospital",
+    reason: "Cancer Treatment",
+    contactPerson: "Dr. Michael Chen",
+    phone: "+1 (555) 234-5678",
+    notes: "Regular transfusion required"
+  },
+  {
+    id: 3,
+    patientId: "P2024003",
+    bloodType: "B+",
+    units: 3,
+    urgency: "high",
+    status: "fulfilled",
+    date: "2024-03-13",
+    hospital: "Regional Medical Center",
+    reason: "Accident Trauma",
+    contactPerson: "Dr. Emily Davis",
+    phone: "+1 (555) 345-6789",
+    notes: "Multiple injuries requiring blood"
+  },
+  {
+    id: 4,
+    patientId: "P2024004",
+    bloodType: "AB+",
+    units: 1,
+    urgency: "medium",
+    status: "pending",
+    date: "2024-03-12",
+    hospital: "Community Hospital",
+    reason: "Anemia Treatment",
+    contactPerson: "Dr. Robert Wilson",
+    phone: "+1 (555) 456-7890",
+    notes: "Chronic anemia patient"
+  }
+];
+
+let currentPage = 1;
+const itemsPerPage = 10;
+let filteredRequests = [...mockRequests];
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadRequests();
+  updateStats();
+});
+
+function loadRequests() {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const requestsToShow = filteredRequests.slice(startIndex, endIndex);
+
+  const tbody = document.getElementById('requestsTableBody');
+  tbody.innerHTML = '';
+
+  requestsToShow.forEach(request => {
+    const row = document.createElement('tr');
+    row.className = 'hover:bg-gray-50 cursor-pointer';
+    row.onclick = () => showRequestDetails(request.id);
+
+    const urgencyColors = {
+      critical: 'bg-red-100 text-red-800',
+      urgent: 'bg-orange-100 text-orange-800',
+      high: 'bg-yellow-100 text-yellow-800',
+      medium: 'bg-blue-100 text-blue-800'
+    };
+
+    const statusColors = {
+      pending: 'bg-gray-100 text-gray-800',
+      matched: 'bg-blue-100 text-blue-800',
+      fulfilled: 'bg-green-100 text-green-800',
+      cancelled: 'bg-red-100 text-red-800'
+    };
+
+    row.innerHTML = `
+      <td class="px-6 py-4 whitespace-nowrap">
+        <div class="text-sm font-medium text-gray-900">${request.patientId}</div>
+        <div class="text-sm text-gray-500">${request.hospital}</div>
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-semibold">${request.bloodType}</span>
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${request.units}</td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <span class="px-2 py-1 rounded-full text-xs font-semibold ${urgencyColors[request.urgency]}">${request.urgency}</span>
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColors[request.status]}">${request.status}</span>
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${request.date}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+        <button onclick="event.stopPropagation(); showRequestDetails(${request.id})" class="text-blue-600 hover:text-blue-900 mr-2">
+          <i class="fas fa-eye"></i>
+        </button>
+        <button onclick="event.stopPropagation(); editRequest(${request.id})" class="text-green-600 hover:text-green-900 mr-2">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button onclick="event.stopPropagation(); deleteRequest(${request.id})" class="text-red-600 hover:text-red-900">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  updatePagination();
+}
+
+function updateStats() {
+  const stats = {
+    pending: mockRequests.filter(r => r.status === 'pending').length,
+    matched: mockRequests.filter(r => r.status === 'matched').length,
+    fulfilled: mockRequests.filter(r => r.status === 'fulfilled').length,
+    critical: mockRequests.filter(r => r.urgency === 'critical').length
+  };
+
+  document.getElementById('pendingRequests').textContent = stats.pending;
+  document.getElementById('matchedRequests').textContent = stats.matched;
+  document.getElementById('fulfilledRequests').textContent = stats.fulfilled;
+  document.getElementById('criticalRequests').textContent = stats.critical;
+}
+
+function updatePagination() {
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage + 1;
+  const endIndex = Math.min(currentPage * itemsPerPage, filteredRequests.length);
+
+  document.getElementById('showingStart').textContent = startIndex;
+  document.getElementById('showingEnd').textContent = endIndex;
+  document.getElementById('totalRequests').textContent = filteredRequests.length;
+  document.getElementById('currentPage').textContent = currentPage;
+
+  document.getElementById('prevPage').disabled = currentPage === 1;
+  document.getElementById('nextPage').disabled = currentPage === totalPages;
+}
+
+function changePage(direction) {
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+  currentPage += direction;
+
+  if (currentPage < 1) currentPage = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  loadRequests();
+}
+
+function applyFilters() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  const bloodTypeFilter = document.getElementById('bloodTypeFilter').value;
+  const statusFilter = document.getElementById('statusFilter').value;
+  const urgencyFilter = document.getElementById('urgencyFilter').value;
+
+  filteredRequests = mockRequests.filter(request => {
+    const matchesSearch = !searchTerm ||
+      request.patientId.toLowerCase().includes(searchTerm) ||
+      request.hospital.toLowerCase().includes(searchTerm) ||
+      request.contactPerson.toLowerCase().includes(searchTerm);
+
+    const matchesBloodType = !bloodTypeFilter || request.bloodType === bloodTypeFilter;
+    const matchesStatus = !statusFilter || request.status === statusFilter;
+    const matchesUrgency = !urgencyFilter || request.urgency === urgencyFilter;
+
+    return matchesSearch && matchesBloodType && matchesStatus && matchesUrgency;
+  });
+
+  currentPage = 1;
+  loadRequests();
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('bloodTypeFilter').value = '';
+  document.getElementById('statusFilter').value = '';
+  document.getElementById('urgencyFilter').value = '';
+  filteredRequests = [...mockRequests];
+  currentPage = 1;
+  loadRequests();
+}
+
+function showRequestDetails(requestId) {
+  const request = mockRequests.find(r => r.id === requestId);
+  if (!request) return;
+
+  const urgencyColors = {
+    critical: 'text-red-600',
+    urgent: 'text-orange-600',
+    high: 'text-yellow-600',
+    medium: 'text-blue-600'
+  };
+
+  const detailsHtml = `
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Request Information</h3>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Patient ID</label>
+            <p class="text-gray-900">${request.patientId}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Blood Type Required</label>
+            <p class="text-gray-900 font-semibold text-red-600">${request.bloodType}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Units Required</label>
+            <p class="text-gray-900">${request.units}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Urgency Level</label>
+            <p class="${urgencyColors[request.urgency]} font-semibold">${request.urgency.toUpperCase()}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Request Date</label>
+            <p class="text-gray-900">${request.date}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Reason</label>
+            <p class="text-gray-900">${request.reason}</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Contact Information</h3>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Hospital</label>
+            <p class="text-gray-900">${request.hospital}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Contact Person</label>
+            <p class="text-gray-900">${request.contactPerson}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Phone</label>
+            <p class="text-gray-900">${request.phone}</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Status</label>
+            <span class="px-2 py-1 rounded-full text-xs font-semibold ${
+              request.status === 'pending' ? 'bg-gray-100 text-gray-800' :
+              request.status === 'matched' ? 'bg-blue-100 text-blue-800' :
+              request.status === 'fulfilled' ? 'bg-green-100 text-green-800' :
+              'bg-red-100 text-red-800'
+            }">${request.status}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-6">
+      <h3 class="text-lg font-semibold mb-2 text-gray-800">Additional Notes</h3>
+      <p class="text-gray-700 bg-gray-50 p-3 rounded">${request.notes}</p>
+    </div>
+  `;
+
+  document.getElementById('requestDetails').innerHTML = detailsHtml;
+  document.getElementById('requestModal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('requestModal').classList.add('hidden');
+}
+
+function createNewRequest() {
+  showAlert('Redirecting to create new request...', 'info');
+  // In a real app, this would redirect to request creation page
+}
+
+function exportRequests() {
+  showAlert('Exporting requests data...', 'info');
+  // In a real app, this would generate and download a CSV/Excel file
+}
+
+function editRequest(requestId) {
+  showAlert(`Editing request ${requestId}...`, 'info');
+  // In a real app, this would open an edit modal or redirect to edit page
+}
+
+function deleteRequest(requestId) {
+  if (confirm('Are you sure you want to delete this request?')) {
+    showAlert(`Request ${requestId} deleted successfully!`, 'success');
+    // In a real app, this would send delete request to server
+  }
+}
+
+// Event listeners for filters
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('bloodTypeFilter').addEventListener('change', applyFilters);
+document.getElementById('statusFilter').addEventListener('change', applyFilters);
+document.getElementById('urgencyFilter').addEventListener('change', applyFilters);
+</script>
+</body>
+</html>

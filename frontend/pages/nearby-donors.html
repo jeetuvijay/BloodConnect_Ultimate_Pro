@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nearby Donors - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-100 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="admin-dashboard.html" class="hover:text-red-200 transition">Admin</a>
+      <a href="donor-dashboard.html" class="hover:text-red-200 transition">Donor</a>
+      <a href="hospital-dashboard.html" class="hover:text-red-200 transition">Hospital</a>
+      <a href="analytics.html" class="hover:text-red-200 transition">Analytics</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="admin-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Admin</a>
+    <a href="donor-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Donor</a>
+    <a href="hospital-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Hospital</a>
+    <a href="analytics.html" class="block px-4 py-2 hover:bg-red-600 transition">Analytics</a>
+  </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8 mt-16">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Nearby Blood Donors</h1>
+    <p class="text-gray-600">Find available donors in your area</p>
+  </div>
+
+  <!-- Search Filters -->
+  <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+    <h2 class="text-xl font-bold mb-4 text-gray-800">Search Filters</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Blood Type</label>
+        <select id="filterBloodType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="">All Types</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Distance</label>
+        <select id="filterDistance" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="5">Within 5 miles</option>
+          <option value="10">Within 10 miles</option>
+          <option value="25">Within 25 miles</option>
+          <option value="50">Within 50 miles</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Availability</label>
+        <select id="filterAvailability" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="">All</option>
+          <option value="available">Available Now</option>
+          <option value="scheduled">Can Schedule</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button onclick="applyFilters()" class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition">
+          <i class="fas fa-search mr-2"></i>Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Summary -->
+  <div class="mb-6">
+    <p class="text-gray-600" id="resultsSummary">Showing 12 available donors within 10 miles</p>
+  </div>
+
+  <!-- Donor List -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="donorGrid">
+    <!-- Donor cards will be populated here -->
+  </div>
+
+  <!-- Load More Button -->
+  <div class="text-center mt-8">
+    <button onclick="loadMoreDonors()" class="bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-700 transition" id="loadMoreBtn">
+      <i class="fas fa-plus mr-2"></i>Load More Donors
+    </button>
+  </div>
+
+  <!-- Emergency Request Section -->
+  <div class="bg-red-50 border border-red-200 rounded-xl p-6 mt-8">
+    <div class="flex items-center mb-4">
+      <div class="text-3xl text-red-600 mr-3">🚨</div>
+      <div>
+        <h3 class="text-xl font-bold text-red-800">Emergency Blood Request</h3>
+        <p class="text-red-600">Need blood urgently? Create an emergency request</p>
+      </div>
+    </div>
+    <button onclick="createEmergencyRequest()" class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition">
+      <i class="fas fa-exclamation-triangle mr-2"></i>Create Emergency Request
+    </button>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+<script>
+// Mock donor data
+const mockDonors = [
+  {
+    name: 'Sarah Johnson',
+    bloodType: 'O+',
+    distance: '2.3 miles',
+    location: 'New York, NY',
+    phone: '+1 (555) 123-4567',
+    status: 'Available',
+    rating: 5,
+    lastDonation: '3 months ago',
+    totalDonations: 8,
+    avatar: 'S'
+  },
+  {
+    name: 'Mike Chen',
+    bloodType: 'A-',
+    distance: '3.1 miles',
+    location: 'Brooklyn, NY',
+    phone: '+1 (555) 234-5678',
+    status: 'Available',
+    rating: 4,
+    lastDonation: '2 months ago',
+    totalDonations: 12,
+    avatar: 'M'
+  },
+  {
+    name: 'Emma Davis',
+    bloodType: 'B+',
+    distance: '4.7 miles',
+    location: 'Queens, NY',
+    phone: '+1 (555) 345-6789',
+    status: 'Scheduled',
+    rating: 5,
+    lastDonation: '1 month ago',
+    totalDonations: 15,
+    avatar: 'E'
+  },
+  {
+    name: 'David Wilson',
+    bloodType: 'AB+',
+    distance: '5.2 miles',
+    location: 'Manhattan, NY',
+    phone: '+1 (555) 456-7890',
+    status: 'Available',
+    rating: 4,
+    lastDonation: '4 months ago',
+    totalDonations: 6,
+    avatar: 'D'
+  },
+  {
+    name: 'Lisa Brown',
+    bloodType: 'O-',
+    distance: '6.1 miles',
+    location: 'Bronx, NY',
+    phone: '+1 (555) 567-8901',
+    status: 'Available',
+    rating: 5,
+    lastDonation: '2 weeks ago',
+    totalDonations: 20,
+    avatar: 'L'
+  },
+  {
+    name: 'James Miller',
+    bloodType: 'A+',
+    distance: '7.3 miles',
+    location: 'Staten Island, NY',
+    phone: '+1 (555) 678-9012',
+    status: 'Busy',
+    rating: 4,
+    lastDonation: '1 week ago',
+    totalDonations: 18,
+    avatar: 'J'
+  },
+  {
+    name: 'Anna Garcia',
+    bloodType: 'B-',
+    distance: '8.4 miles',
+    location: 'Newark, NJ',
+    phone: '+1 (555) 789-0123',
+    status: 'Available',
+    rating: 5,
+    lastDonation: '3 weeks ago',
+    totalDonations: 9,
+    avatar: 'A'
+  },
+  {
+    name: 'Robert Taylor',
+    bloodType: 'AB-',
+    distance: '9.2 miles',
+    location: 'Jersey City, NJ',
+    phone: '+1 (555) 890-1234',
+    status: 'Scheduled',
+    rating: 4,
+    lastDonation: '5 months ago',
+    totalDonations: 7,
+    avatar: 'R'
+  }
+];
+
+let currentPage = 1;
+const donorsPerPage = 6;
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedBloodType = urlParams.get('bloodType');
+
+  if (requestedBloodType) {
+    document.getElementById('filterBloodType').value = requestedBloodType;
+  }
+
+  displayDonors();
+});
+
+function displayDonors(filteredDonors = null) {
+  const donors = filteredDonors || mockDonors.slice(0, donorsPerPage * currentPage);
+  const donorGrid = document.getElementById('donorGrid');
+
+  donorGrid.innerHTML = donors.map(donor => `
+    <div class="bg-white p-6 rounded-xl shadow-lg card-hover">
+      <div class="flex items-start justify-between mb-4">
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold text-xl mr-4">
+            ${donor.avatar}
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-gray-800">${donor.name}</h3>
+            <p class="text-gray-600">${donor.bloodType} • ${donor.distance}</p>
+            <p class="text-gray-500 text-sm">${donor.location}</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="bg-${donor.status === 'Available' ? 'green' : donor.status === 'Scheduled' ? 'blue' : 'gray'}-100 text-${donor.status === 'Available' ? 'green' : donor.status === 'Scheduled' ? 'blue' : 'gray'}-800 px-2 py-1 rounded text-sm">
+            ${donor.status}
+          </span>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="flex items-center justify-between text-sm text-gray-600 mb-2">
+          <span>Last donation: ${donor.lastDonation}</span>
+          <span>Total donations: ${donor.totalDonations}</span>
+        </div>
+        <div class="flex text-yellow-400">
+          ${'★'.repeat(donor.rating)}${'☆'.repeat(5-donor.rating)}
+          <span class="text-gray-600 text-sm ml-2">(${donor.rating}.0)</span>
+        </div>
+      </div>
+
+      <div class="flex space-x-2">
+        <button onclick="contactDonor('${donor.phone}')" class="flex-1 bg-red-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition">
+          <i class="fas fa-phone mr-1"></i>Contact
+        </button>
+        <button onclick="viewDonorProfile('${donor.name}')" class="flex-1 bg-gray-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-700 transition">
+          <i class="fas fa-user mr-1"></i>Profile
+        </button>
+      </div>
+    </div>
+  `).join('');
+
+  updateResultsSummary(donors.length);
+}
+
+function applyFilters() {
+  const bloodType = document.getElementById('filterBloodType').value;
+  const distance = parseInt(document.getElementById('filterDistance').value);
+  const availability = document.getElementById('filterAvailability').value;
+
+  let filtered = mockDonors.filter(donor => {
+    const donorDistance = parseFloat(donor.distance.split(' ')[0]);
+    const matchesBloodType = !bloodType || donor.bloodType === bloodType;
+    const matchesDistance = donorDistance <= distance;
+    const matchesAvailability = !availability ||
+      (availability === 'available' && donor.status === 'Available') ||
+      (availability === 'scheduled' && donor.status === 'Scheduled');
+
+    return matchesBloodType && matchesDistance && matchesAvailability;
+  });
+
+  currentPage = 1;
+  displayDonors(filtered);
+}
+
+function loadMoreDonors() {
+  currentPage++;
+  const btn = document.getElementById('loadMoreBtn');
+  btn.innerHTML = '<div class="loading"></div> Loading...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    displayDonors();
+    btn.innerHTML = '<i class="fas fa-plus mr-2"></i>Load More Donors';
+    btn.disabled = false;
+
+    if (currentPage * donorsPerPage >= mockDonors.length) {
+      btn.style.display = 'none';
+    }
+  }, 1000);
+}
+
+function updateResultsSummary(count) {
+  document.getElementById('resultsSummary').textContent = `Showing ${count} available donors within ${document.getElementById('filterDistance').value} miles`;
+}
+
+function createEmergencyRequest() {
+  showAlert('Redirecting to emergency request form...');
+  setTimeout(() => {
+    window.location.href = 'emergency-request.html';
+  }, 1000);
+}
+</script>
+</body>
+</html>

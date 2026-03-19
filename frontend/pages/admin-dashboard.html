@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-100 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="admin-dashboard.html" class="hover:text-red-200 transition">Admin</a>
+      <a href="donor-dashboard.html" class="hover:text-red-200 transition">Donor</a>
+      <a href="hospital-dashboard.html" class="hover:text-red-200 transition">Hospital</a>
+      <a href="analytics.html" class="hover:text-red-200 transition">Analytics</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="admin-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Admin</a>
+    <a href="donor-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Donor</a>
+    <a href="hospital-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Hospital</a>
+    <a href="analytics.html" class="block px-4 py-2 hover:bg-red-600 transition">Analytics</a>
+  </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8 mt-16">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
+    <p class="text-gray-600">Monitor and manage the BloodConnect platform</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Total Donors</h3>
+          <p class="text-3xl font-bold text-red-600" id="totalDonors">1,200</p>
+          <p class="text-sm text-green-600 mt-1">+12% this month</p>
+        </div>
+        <div class="text-4xl">👥</div>
+      </div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Partner Hospitals</h3>
+          <p class="text-3xl font-bold text-blue-600" id="totalHospitals">45</p>
+          <p class="text-sm text-green-600 mt-1">+2 this month</p>
+        </div>
+        <div class="text-4xl">🏥</div>
+      </div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Active Requests</h3>
+          <p class="text-3xl font-bold text-orange-600" id="activeRequests">8</p>
+          <p class="text-sm text-red-600 mt-1">3 urgent</p>
+        </div>
+        <div class="text-4xl">📋</div>
+      </div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Blood Units</h3>
+          <p class="text-3xl font-bold text-green-600" id="totalUnits">2,450</p>
+          <p class="text-sm text-green-600 mt-1">98% in stock</p>
+        </div>
+        <div class="text-4xl">🩸</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h3 class="text-xl font-bold mb-4 text-gray-800">Blood Inventory by Type</h3>
+      <canvas id="inventoryChart" width="400" height="300"></canvas>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h3 class="text-xl font-bold mb-4 text-gray-800">Recent Activities</h3>
+      <div class="space-y-4 max-h-80 overflow-y-auto">
+        <div class="flex items-start space-x-3 p-3 bg-green-50 rounded">
+          <div class="text-green-600 text-lg">🩸</div>
+          <div>
+            <p class="font-semibold text-green-800">New Donation</p>
+            <p class="text-sm text-gray-600">John Doe donated A+ at City Hospital</p>
+            <p class="text-xs text-gray-500">2 hours ago</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded">
+          <div class="text-blue-600 text-lg">🏥</div>
+          <div>
+            <p class="font-semibold text-blue-800">Hospital Request</p>
+            <p class="text-sm text-gray-600">Metro Hospital requested 5 units of O-</p>
+            <p class="text-xs text-gray-500">4 hours ago</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-3 p-3 bg-purple-50 rounded">
+          <div class="text-purple-600 text-lg">👤</div>
+          <div>
+            <p class="font-semibold text-purple-800">New Registration</p>
+            <p class="text-sm text-gray-600">Sarah Johnson joined as a donor (B+)</p>
+            <p class="text-xs text-gray-500">6 hours ago</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-3 p-3 bg-red-50 rounded">
+          <div class="text-red-600 text-lg">🚨</div>
+          <div>
+            <p class="font-semibold text-red-800">Urgent Request</p>
+            <p class="text-sm text-gray-600">Emergency: AB- needed at General Hospital</p>
+            <p class="text-xs text-gray-500">8 hours ago</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <h3 class="text-xl font-bold mb-4 text-gray-800">Quick Actions</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <button onclick="addHospital()" class="p-4 bg-red-50 rounded-lg hover:bg-red-100 transition text-center">
+        <i class="fas fa-plus text-2xl text-red-600 mb-2"></i>
+        <p class="text-sm font-semibold">Add Hospital</p>
+      </button>
+      <button onclick="manageInventory()" class="p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-center">
+        <i class="fas fa-boxes text-2xl text-blue-600 mb-2"></i>
+        <p class="text-sm font-semibold">Inventory</p>
+      </button>
+      <button onclick="viewReports()" class="p-4 bg-green-50 rounded-lg hover:bg-green-100 transition text-center">
+        <i class="fas fa-chart-bar text-2xl text-green-600 mb-2"></i>
+        <p class="text-sm font-semibold">Reports</p>
+      </button>
+      <button onclick="emergencyAlerts()" class="p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition text-center">
+        <i class="fas fa-exclamation-triangle text-2xl text-orange-600 mb-2"></i>
+        <p class="text-sm font-semibold">Alerts</p>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize inventory chart
+  const ctx = document.getElementById('inventoryChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      datasets: [{
+        label: 'Units Available',
+        data: [120, 45, 89, 23, 67, 12, 156, 34],
+        backgroundColor: [
+          '#dc2626', '#ef4444', '#f87171', '#fca5a5',
+          '#dc2626', '#ef4444', '#f87171', '#fca5a5'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+});
+
+function addHospital() {
+  showAlert('Redirecting to add hospital form...');
+}
+
+function manageInventory() {
+  showAlert('Opening inventory management...');
+}
+
+function viewReports() {
+  window.location.href = 'analytics.html';
+}
+
+function emergencyAlerts() {
+  showAlert('Checking emergency alerts...');
+}
+</script>
+</body>
+</html>

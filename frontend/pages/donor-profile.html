@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donor Profile - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-50 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="admin-dashboard.html" class="hover:text-red-200 transition">Admin</a>
+      <a href="donor-dashboard.html" class="hover:text-red-200 transition">Donor</a>
+      <a href="hospital-dashboard.html" class="hover:text-red-200 transition">Hospital</a>
+      <a href="analytics.html" class="hover:text-red-200 transition">Analytics</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="admin-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Admin</a>
+    <a href="donor-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Donor</a>
+    <a href="hospital-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Hospital</a>
+    <a href="analytics.html" class="block px-4 py-2 hover:bg-red-600 transition">Analytics</a>
+  </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8 mt-16">
+  <!-- Profile Header -->
+  <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+    <div class="flex flex-col md:flex-row items-center md:items-start">
+      <div class="relative mb-6 md:mb-0 md:mr-8">
+        <img src="https://via.placeholder.com/150x150/ef4444/ffffff?text=JD" alt="Donor Avatar" class="w-32 h-32 rounded-full border-4 border-red-200" id="donorAvatar">
+        <button class="absolute bottom-0 right-0 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition" onclick="changeAvatar()">
+          <i class="fas fa-camera text-sm"></i>
+        </button>
+      </div>
+
+      <div class="flex-1 text-center md:text-left">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2" id="donorName">John Doe</h1>
+        <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-4">
+          <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold" id="bloodType">O+ Donor</span>
+          <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold" id="donationCount">15 Donations</span>
+          <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold" id="lastDonation">Last: 3 months ago</span>
+        </div>
+        <p class="text-gray-600 mb-4" id="donorBio">Dedicated blood donor committed to saving lives. Available for emergency donations.</p>
+        <div class="flex flex-wrap justify-center md:justify-start gap-2">
+          <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition" onclick="scheduleDonation()">
+            <i class="fas fa-calendar-plus mr-2"></i>Schedule Donation
+          </button>
+          <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition" onclick="editProfile()">
+            <i class="fas fa-edit mr-2"></i>Edit Profile
+          </button>
+          <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition" onclick="shareProfile()">
+            <i class="fas fa-share mr-2"></i>Share Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-8">
+      <!-- Personal Information -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Personal Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <p class="text-gray-900 font-semibold" id="fullName">John Doe</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+            <p class="text-gray-900 font-semibold" id="dateOfBirth">January 15, 1990</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+            <p class="text-gray-900 font-semibold" id="gender">Male</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Blood Type</label>
+            <p class="text-gray-900 font-semibold" id="bloodTypeDetail">O+ (Universal Donor)</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <p class="text-gray-900 font-semibold" id="phoneNumber">+1 (555) 123-4567</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <p class="text-gray-900 font-semibold" id="emailAddress">john.doe@email.com</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donation History -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Donation History</h2>
+        <div class="space-y-4" id="donationHistory">
+          <!-- Donation entries will be populated by JavaScript -->
+        </div>
+        <div class="mt-6 text-center">
+          <button class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition" onclick="loadMoreHistory()">
+            Load More History
+          </button>
+        </div>
+      </div>
+
+      <!-- Health Information -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Health Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+            <p class="text-gray-900 font-semibold" id="weight">175 lbs</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Height</label>
+            <p class="text-gray-900 font-semibold" id="height">5'10"</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Medical Conditions</label>
+            <p class="text-gray-900 font-semibold" id="medicalConditions">None</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Medications</label>
+            <p class="text-gray-900 font-semibold" id="medications">None</p>
+          </div>
+        </div>
+        <div class="mt-6">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800">Eligibility Status</h3>
+          <div class="flex items-center">
+            <i class="fas fa-check-circle text-green-600 text-xl mr-2"></i>
+            <span class="text-green-600 font-semibold">Currently Eligible to Donate</span>
+          </div>
+          <p class="text-sm text-gray-600 mt-2">Last health screening: March 15, 2024</p>
+        </div>
+      </div>
+
+      <!-- Achievements & Badges -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Achievements & Badges</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="achievements">
+          <!-- Achievement badges will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-8">
+      <!-- Quick Stats -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Quick Stats</h2>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Total Donations</span>
+            <span class="font-bold text-red-600" id="totalDonations">15</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Lives Saved</span>
+            <span class="font-bold text-green-600" id="livesSaved">45</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Donation Streak</span>
+            <span class="font-bold text-blue-600" id="donationStreak">3 months</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Next Eligible</span>
+            <span class="font-bold text-purple-600" id="nextEligible">June 15, 2024</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Appointments -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Upcoming Appointments</h2>
+        <div id="upcomingAppointments">
+          <div class="text-center text-gray-500 py-4">
+            <i class="fas fa-calendar-times text-3xl mb-2"></i>
+            <p>No upcoming appointments</p>
+          </div>
+        </div>
+        <button class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition mt-4" onclick="scheduleDonation()">
+          Schedule New Donation
+        </button>
+      </div>
+
+      <!-- Emergency Contact -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Emergency Contact</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Name</label>
+            <p class="text-gray-900 font-semibold" id="emergencyName">Jane Doe</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Relationship</label>
+            <p class="text-gray-900 font-semibold" id="emergencyRelation">Sister</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Phone</label>
+            <p class="text-gray-900 font-semibold" id="emergencyPhone">+1 (555) 987-6543</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location & Availability -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Location & Availability</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">City</label>
+            <p class="text-gray-900 font-semibold" id="city">New York, NY</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Preferred Donation Centers</label>
+            <p class="text-gray-900 font-semibold" id="preferredCenters">City General Hospital, Red Cross Center</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Availability</label>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Weekdays</span>
+              <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Evenings</span>
+              <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Weekends</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Settings</h2>
+        <div class="space-y-3">
+          <label class="flex items-center">
+            <input type="checkbox" id="emailNotifications" class="mr-2" checked>
+            <span class="text-sm">Email notifications for donation requests</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" id="smsNotifications" class="mr-2" checked>
+            <span class="text-sm">SMS notifications for emergencies</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" id="publicProfile" class="mr-2">
+            <span class="text-sm">Make profile visible to hospitals</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" id="anonymousDonations" class="mr-2">
+            <span class="text-sm">Anonymous donations</span>
+          </label>
+        </div>
+        <button class="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition mt-4" onclick="saveSettings()">
+          Save Settings
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script>
+// Mock donor data
+const donorData = {
+  name: "John Doe",
+  bloodType: "O+",
+  donationCount: 15,
+  lastDonation: "3 months ago",
+  bio: "Dedicated blood donor committed to saving lives. Available for emergency donations.",
+  fullName: "John Doe",
+  dateOfBirth: "January 15, 1990",
+  gender: "Male",
+  phoneNumber: "+1 (555) 123-4567",
+  emailAddress: "john.doe@email.com",
+  weight: "175 lbs",
+  height: "5'10\"",
+  medicalConditions: "None",
+  medications: "None",
+  totalDonations: 15,
+  livesSaved: 45,
+  donationStreak: "3 months",
+  nextEligible: "June 15, 2024",
+  emergencyName: "Jane Doe",
+  emergencyRelation: "Sister",
+  emergencyPhone: "+1 (555) 987-6543",
+  city: "New York, NY",
+  preferredCenters: "City General Hospital, Red Cross Center"
+};
+
+// Donation history mock data
+const donationHistory = [
+  { date: "2024-03-15", location: "City General Hospital", type: "Whole Blood", status: "Completed" },
+  { date: "2024-01-20", location: "Red Cross Center", type: "Whole Blood", status: "Completed" },
+  { date: "2023-11-10", location: "Metropolitan Hospital", type: "Platelets", status: "Completed" },
+  { date: "2023-09-05", location: "City General Hospital", type: "Whole Blood", status: "Completed" },
+  { date: "2023-07-12", location: "Red Cross Center", type: "Whole Blood", status: "Completed" }
+];
+
+// Achievements mock data
+const achievements = [
+  { name: "First Time Donor", icon: "fas fa-star", color: "text-yellow-500" },
+  { name: "Regular Donor", icon: "fas fa-medal", color: "text-blue-500" },
+  { name: "Life Saver", icon: "fas fa-heart", color: "text-red-500" },
+  { name: "Emergency Responder", icon: "fas fa-ambulance", color: "text-green-500" },
+  { name: "15 Donations", icon: "fas fa-trophy", color: "text-purple-500" },
+  { name: "Universal Donor", icon: "fas fa-universal-access", color: "text-indigo-500" }
+];
+
+// Load donor data
+document.addEventListener('DOMContentLoaded', function() {
+  loadDonorProfile();
+  loadDonationHistory();
+  loadAchievements();
+});
+
+function loadDonorProfile() {
+  // Populate profile information
+  Object.keys(donorData).forEach(key => {
+    const element = document.getElementById(key);
+    if (element) {
+      element.textContent = donorData[key];
+    }
+  });
+
+  // Update header info
+  document.getElementById('donorName').textContent = donorData.name;
+  document.getElementById('bloodType').textContent = donorData.bloodType + ' Donor';
+  document.getElementById('donationCount').textContent = donorData.donationCount + ' Donations';
+  document.getElementById('lastDonation').textContent = 'Last: ' + donorData.lastDonation;
+  document.getElementById('donorBio').textContent = donorData.bio;
+}
+
+function loadDonationHistory() {
+  const historyContainer = document.getElementById('donationHistory');
+
+  donationHistory.forEach(donation => {
+    const donationCard = document.createElement('div');
+    donationCard.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg';
+    donationCard.innerHTML = `
+      <div class="flex items-center">
+        <div class="bg-red-100 p-2 rounded-full mr-4">
+          <i class="fas fa-tint text-red-600"></i>
+        </div>
+        <div>
+          <div class="font-semibold text-gray-800">${donation.location}</div>
+          <div class="text-sm text-gray-600">${donation.date} • ${donation.type}</div>
+        </div>
+      </div>
+      <div class="text-right">
+        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">${donation.status}</span>
+      </div>
+    `;
+    historyContainer.appendChild(donationCard);
+  });
+}
+
+function loadAchievements() {
+  const achievementsContainer = document.getElementById('achievements');
+
+  achievements.forEach(achievement => {
+    const achievementCard = document.createElement('div');
+    achievementCard.className = 'text-center p-4 bg-gray-50 rounded-lg';
+    achievementCard.innerHTML = `
+      <i class="${achievement.icon} ${achievement.color} text-2xl mb-2"></i>
+      <div class="text-sm font-semibold text-gray-800">${achievement.name}</div>
+    `;
+    achievementsContainer.appendChild(achievementCard);
+  });
+}
+
+function scheduleDonation() {
+  showAlert('Redirecting to donation scheduling...', 'info');
+  // In a real app, this would redirect to scheduling page
+}
+
+function editProfile() {
+  showAlert('Opening profile editor...', 'info');
+  // In a real app, this would open an edit modal or redirect to edit page
+}
+
+function shareProfile() {
+  const shareUrl = window.location.href;
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    showAlert('Profile link copied to clipboard!', 'success');
+  });
+}
+
+function changeAvatar() {
+  showAlert('Avatar change feature coming soon!', 'info');
+}
+
+function loadMoreHistory() {
+  showAlert('Loading more donation history...', 'info');
+  // In a real app, this would load more data from server
+}
+
+function saveSettings() {
+  const settings = {
+    emailNotifications: document.getElementById('emailNotifications').checked,
+    smsNotifications: document.getElementById('smsNotifications').checked,
+    publicProfile: document.getElementById('publicProfile').checked,
+    anonymousDonations: document.getElementById('anonymousDonations').checked
+  };
+
+  // Save to localStorage (in real app, send to server)
+  localStorage.setItem('donorSettings', JSON.stringify(settings));
+  showAlert('Settings saved successfully!', 'success');
+}
+</script>
+</body>
+</html>

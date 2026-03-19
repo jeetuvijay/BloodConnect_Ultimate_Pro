@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help Center - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-100 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="../index.html#about" class="hover:text-red-200 transition">About</a>
+      <a href="login.html" class="hover:text-red-200 transition">Login</a>
+      <a href="register.html" class="bg-white text-red-700 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition">Register</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="../index.html#about" class="block px-4 py-2 hover:bg-red-600 transition">About</a>
+    <a href="login.html" class="block px-4 py-2 hover:bg-red-600 transition">Login</a>
+    <a href="register.html" class="block px-4 py-2 bg-white text-red-700 font-semibold rounded mx-4 my-2 text-center">Register</a>
+  </div>
+</nav>
+
+<section class="py-32 bg-white mt-16">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Help Center</h1>
+    <p class="text-lg text-gray-600 text-center mb-12">Find answers to common questions about blood donation and using BloodConnect</p>
+
+    <!-- Search Bar -->
+    <div class="mb-12">
+      <div class="max-w-md mx-auto">
+        <div class="relative">
+          <input type="text" id="faqSearch" placeholder="Search FAQs..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Categories -->
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+      <div class="bg-red-50 p-6 rounded-lg text-center hover:bg-red-100 transition cursor-pointer" onclick="filterFAQs('donors')">
+        <div class="text-4xl mb-4">🩸</div>
+        <h3 class="text-xl font-semibold text-gray-800">For Donors</h3>
+        <p class="text-gray-600">Questions about donating blood</p>
+      </div>
+      <div class="bg-blue-50 p-6 rounded-lg text-center hover:bg-blue-100 transition cursor-pointer" onclick="filterFAQs('hospitals')">
+        <div class="text-4xl mb-4">🏥</div>
+        <h3 class="text-xl font-semibold text-gray-800">For Hospitals</h3>
+        <p class="text-gray-600">Hospital partnership inquiries</p>
+      </div>
+      <div class="bg-green-50 p-6 rounded-lg text-center hover:bg-green-100 transition cursor-pointer" onclick="filterFAQs('recipients')">
+        <div class="text-4xl mb-4">❤️</div>
+        <h3 class="text-xl font-semibold text-gray-800">For Recipients</h3>
+        <p class="text-gray-600">Finding blood donors</p>
+      </div>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="space-y-4" id="faqContainer">
+      <!-- Donor FAQs -->
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="donors">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">Who can donate blood?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Generally, you must be at least 18 years old, weigh at least 110 pounds, and be in good health. Some medical conditions or medications may temporarily or permanently prevent donation. Please consult with our medical team for specific eligibility requirements.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="donors">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">How often can I donate blood?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Whole blood donors can donate every 56 days (8 weeks). Platelet donors can donate every 7 days, up to 24 times per year. Plasma donors can donate twice weekly, with at least 48 hours between donations.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="donors">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">What should I do before donating?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Get plenty of sleep, eat a healthy meal, drink extra fluids, and avoid fatty foods. Bring your ID, wear comfortable clothing, and be prepared to stay for about 1-2 hours total.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="donors">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">Does donating blood hurt?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Most donors feel only a brief pinch when the needle is inserted. The actual donation process is painless. Some donors experience mild dizziness or bruising afterward, but these effects are usually temporary.</p>
+        </div>
+      </div>
+
+      <!-- Hospital FAQs -->
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="hospitals">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">How do I register my hospital?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Visit our Hospital Registration page and provide your facility's information, including license details, contact information, and blood bank credentials. Our team will verify your information and approve your account within 24-48 hours.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="hospitals">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">How does emergency blood matching work?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">In emergency situations, log into your hospital dashboard and submit an urgent blood request with the required blood type, quantity, and urgency level. Our system will immediately notify compatible donors in your area and coordinate the donation process.</p>
+        </div>
+      </div>
+
+      <!-- Recipient FAQs -->
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="recipients">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">How do I find blood donors?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Hospitals can search for available donors through their dashboard. For emergency situations, contact your local hospital's blood bank directly. They can access our network to find compatible donors quickly.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="recipients">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">What blood types are compatible?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Blood type compatibility depends on the ABO and Rh systems. For example, O- is the universal donor, while AB+ can receive from any type. Our system automatically matches compatible donors based on medical standards.</p>
+        </div>
+      </div>
+
+      <!-- General FAQs -->
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="general">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">Is my personal information secure?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Yes, we use industry-standard encryption and security measures to protect your personal information. We comply with HIPAA and other privacy regulations. Your data is only shared with verified hospitals for matching purposes.</p>
+        </div>
+      </div>
+
+      <div class="faq-item bg-white border border-gray-200 rounded-lg" data-category="general">
+        <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none" onclick="toggleFAQ(this)">
+          <span class="font-semibold text-gray-800">How do I update my profile information?</span>
+          <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </button>
+        <div class="px-6 pb-4 hidden">
+          <p class="text-gray-600">Log into your account and navigate to your profile settings. You can update your contact information, medical history, and donation preferences. Keep your information current to ensure accurate matching.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Support -->
+    <div class="mt-12 bg-gray-50 p-8 rounded-lg text-center">
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">Still need help?</h3>
+      <p class="text-gray-600 mb-6">Can't find the answer you're looking for? Our support team is here to help.</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="contact.html" class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition">Contact Support</a>
+        <a href="tel:+15551234567" class="border border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition">Call Emergency Hotline</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-red-700 text-white py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <h3 class="text-xl font-semibold mb-4">🩸 BloodConnect</h3>
+        <p class="text-red-200 mb-4">Connecting donors with those in need, one drop at a time.</p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="../index.html" class="text-red-200 hover:text-white transition">Home</a></li>
+          <li><a href="../index.html#about" class="text-red-200 hover:text-white transition">About</a></li>
+          <li><a href="../index.html#how-it-works" class="text-red-200 hover:text-white transition">How It Works</a></li>
+          <li><a href="../index.html#search" class="text-red-200 hover:text-white transition">Find Blood</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Support</h3>
+        <ul class="space-y-2">
+          <li><a href="contact.html" class="text-red-200 hover:text-white transition">Contact Us</a></li>
+          <li><a href="faq.html" class="text-red-200 hover:text-white transition">Help Center</a></li>
+          <li><a href="#" class="text-red-200 hover:text-white transition">Emergency Hotline</a></li>
+          <li><a href="privacy-policy.html" class="text-red-200 hover:text-white transition">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Get Started</h3>
+        <ul class="space-y-2">
+          <li><a href="register.html" class="text-red-200 hover:text-white transition">Become a Donor</a></li>
+          <li><a href="login.html" class="text-red-200 hover:text-white transition">Hospital Login</a></li>
+          <li><a href="hospital-register.html" class="text-red-200 hover:text-white transition">Partner With Us</a></li>
+          <li><a href="#" class="text-red-200 hover:text-white transition">Download App</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-red-600 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p>© 2026 BloodConnect. All rights reserved.</p>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <a href="terms-of-service.html" class="text-red-200 hover:text-white transition text-sm">Terms of Service</a>
+        <a href="privacy-policy.html" class="text-red-200 hover:text-white transition text-sm">Privacy Policy</a>
+        <a href="#" class="text-red-200 hover:text-white transition text-sm">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/script.js"></script>
+<script>
+function toggleFAQ(button) {
+  const content = button.nextElementSibling;
+  const icon = button.querySelector('i');
+  
+  content.classList.toggle('hidden');
+  icon.classList.toggle('rotate-180');
+}
+
+function filterFAQs(category) {
+  const faqs = document.querySelectorAll('.faq-item');
+  faqs.forEach(faq => {
+    if (category === 'all' || faq.dataset.category === category) {
+      faq.style.display = 'block';
+    } else {
+      faq.style.display = 'none';
+    }
+  });
+}
+
+// Search functionality
+document.getElementById('faqSearch').addEventListener('input', function(e) {
+  const searchTerm = e.target.value.toLowerCase();
+  const faqs = document.querySelectorAll('.faq-item');
+  
+  faqs.forEach(faq => {
+    const question = faq.querySelector('span').textContent.toLowerCase();
+    const answer = faq.querySelector('p').textContent.toLowerCase();
+    
+    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+      faq.style.display = 'block';
+    } else {
+      faq.style.display = 'none';
+    }
+  });
+});
+</script>
+</body>
+</html>

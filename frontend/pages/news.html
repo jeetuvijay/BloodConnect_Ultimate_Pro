@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News & Blog - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-100 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="../index.html#about" class="hover:text-red-200 transition">About</a>
+      <a href="news.html" class="hover:text-red-200 transition">News</a>
+      <a href="login.html" class="hover:text-red-200 transition">Login</a>
+      <a href="register.html" class="bg-white text-red-700 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition">Register</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="../index.html#about" class="block px-4 py-2 hover:bg-red-600 transition">About</a>
+    <a href="news.html" class="block px-4 py-2 hover:bg-red-600 transition">News</a>
+    <a href="login.html" class="block px-4 py-2 hover:bg-red-600 transition">Login</a>
+    <a href="register.html" class="block px-4 py-2 bg-white text-red-700 font-semibold rounded mx-4 my-2 text-center">Register</a>
+  </div>
+</nav>
+
+<section class="py-32 bg-white mt-16">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">News & Blog</h1>
+      <p class="text-lg text-gray-600">Stay updated with the latest news, stories, and insights from the world of blood donation</p>
+    </div>
+
+    <!-- Featured Article -->
+    <div class="mb-12">
+      <div class="bg-gradient-to-r from-red-600 to-red-800 text-white rounded-xl p-8 md:p-12">
+        <div class="md:flex items-center">
+          <div class="md:w-2/3 mb-6 md:mb-0 md:pr-8">
+            <div class="text-sm font-semibold mb-2">FEATURED STORY</div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">How One Donor Saved Three Lives in One Week</h2>
+            <p class="text-lg mb-6">Meet Sarah Johnson, whose regular donations helped save lives during a critical blood shortage. Her story inspires us all to give the gift of life.</p>
+            <a href="#article1" class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">Read Full Story</a>
+          </div>
+          <div class="md:w-1/3">
+            <div class="bg-white bg-opacity-20 rounded-lg p-6 text-center">
+              <div class="text-5xl mb-4">🏆</div>
+              <div class="text-2xl font-bold">Hero Donor</div>
+              <div class="text-red-200">2026 Award Winner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      <!-- Article 1 -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition card-hover">
+        <div class="h-48 bg-gradient-to-r from-red-400 to-red-600 flex items-center justify-center">
+          <div class="text-white text-6xl">🩸</div>
+        </div>
+        <div class="p-6">
+          <div class="text-sm text-red-600 font-semibold mb-2">DONATION STORIES</div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">The Power of Regular Donation</h3>
+          <p class="text-gray-600 mb-4">Discover how consistent blood donors are making a lasting impact on their communities and emergency response capabilities.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Feb 20, 2026</span>
+            <a href="#" class="text-red-600 font-semibold hover:text-red-700">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article 2 -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition card-hover">
+        <div class="h-48 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
+          <div class="text-white text-6xl">🏥</div>
+        </div>
+        <div class="p-6">
+          <div class="text-sm text-blue-600 font-semibold mb-2">HOSPITAL NEWS</div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">New Partnership Program Launched</h3>
+          <p class="text-gray-600 mb-4">We're excited to announce our expanded partnership with 50 new hospitals across the country, improving blood availability nationwide.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Feb 18, 2026</span>
+            <a href="#" class="text-blue-600 font-semibold hover:text-blue-700">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article 3 -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition card-hover">
+        <div class="h-48 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
+          <div class="text-white text-6xl">📊</div>
+        </div>
+        <div class="p-6">
+          <div class="text-sm text-green-600 font-semibold mb-2">RESEARCH</div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">Blood Donation Trends in 2026</h3>
+          <p class="text-gray-600 mb-4">Our latest analysis shows encouraging trends in blood donation rates, with technology playing a key role in increasing participation.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Feb 15, 2026</span>
+            <a href="#" class="text-green-600 font-semibold hover:text-green-700">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article 4 -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition card-hover">
+        <div class="h-48 bg-gradient-to-r from-purple-400 to-purple-600 flex items-center justify-center">
+          <div class="text-white text-6xl">🎓</div>
+        </div>
+        <div class="p-6">
+          <div class="text-sm text-purple-600 font-semibold mb-2">EDUCATION</div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">Myths About Blood Donation</h3>
+          <p class="text-gray-600 mb-4">Separating fact from fiction: Common misconceptions about blood donation that prevent people from becoming donors.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Feb 12, 2026</span>
+            <a href="#" class="text-purple-600 font-semibold hover:text-purple-700">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article 5 -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition card-hover">
+        <div class="h-48 bg-gradient-to-r from-yellow-400 to-yellow-600 flex items-center justify-center">
+          <div class="text-white text-6xl">🏆</div>
+        </div>
+        <div class="p-6">
+          <div class="text-sm text-yellow-600 font-semibold mb-2">AWARDS</div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">Community Impact Awards 2026</h3>
+          <p class="text-gray-600 mb-4">Celebrating outstanding donors and hospitals who went above and beyond to save lives in their communities this year.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Feb 10, 2026</span>
+            <a href="#" class="text-yellow-600 font-semibold hover:text-yellow-700">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article 6 -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition card-hover">
+        <div class="h-48 bg-gradient-to-r from-indigo-400 to-indigo-600 flex items-center justify-center">
+          <div class="text-white text-6xl">🔬</div>
+        </div>
+        <div class="p-6">
+          <div class="text-sm text-indigo-600 font-semibold mb-2">HEALTH</div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">Benefits of Regular Blood Donation</h3>
+          <p class="text-gray-600 mb-4">Beyond saving lives, regular blood donation offers surprising health benefits for donors. Learn what science tells us.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Feb 8, 2026</span>
+            <a href="#" class="text-indigo-600 font-semibold hover:text-indigo-700">Read More →</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Newsletter Signup -->
+    <div class="bg-gray-50 rounded-xl p-8 text-center">
+      <h3 class="text-2xl font-bold text-gray-800 mb-4">Stay Informed</h3>
+      <p class="text-gray-600 mb-6">Subscribe to our newsletter for the latest news, donation opportunities, and success stories.</p>
+      <div class="max-w-md mx-auto">
+        <div class="flex gap-4">
+          <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <button class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Full Article Modal (Hidden by default) -->
+<div id="articleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-xl max-w-4xl w-full max-h-screen overflow-y-auto">
+      <div class="p-8">
+        <div class="flex justify-between items-start mb-6">
+          <h2 class="text-3xl font-bold text-gray-800">How One Donor Saved Three Lives in One Week</h2>
+          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+        </div>
+        <div class="text-sm text-gray-500 mb-6">Published on February 20, 2026 • By BloodConnect Team</div>
+        <div class="prose prose-lg max-w-none">
+          <p>Sarah Johnson never imagined that her weekly blood donation habit would lead to saving three lives in the span of just seven days. But that's exactly what happened during a critical blood shortage in her community.</p>
+
+          <p>"I started donating blood five years ago because I wanted to help others," Sarah explains. "It's just one hour out of my week, but it can make such a difference."</p>
+
+          <p>Little did she know that her O-negative blood type would be in high demand during a particularly challenging week for local hospitals. O-negative is known as the "universal donor" because it can be transfused to patients of any blood type in emergency situations.</p>
+
+          <h3>The First Life Saved</h3>
+          <p>On Monday, Sarah received an emergency notification through the BloodConnect app. A local hospital needed O-negative blood urgently for a car accident victim. Sarah was able to donate that afternoon, and the hospital later informed her that her donation helped save the life of a young father of two.</p>
+
+          <h3>The Second Life</h3>
+          <p>Just two days later, Sarah got another urgent request. This time, it was for a newborn baby who needed a blood transfusion due to complications during delivery. Sarah's donation provided the critical blood needed for the infant's surgery.</p>
+
+          <h3>The Third Life</h3>
+          <p>On Friday of that same week, Sarah responded to her third emergency call. An elderly patient undergoing cancer treatment required O-negative blood. Sarah's donation helped stabilize the patient during a critical procedure.</p>
+
+          <p>"I was amazed to learn that my three donations in one week helped save three different people," Sarah says. "It really puts things in perspective. Blood donation isn't just about giving blood—it's about giving life."</p>
+
+          <p>Sarah's story highlights the importance of regular donors, especially those with universal blood types. During times of shortage, these donors become lifesaving heroes.</p>
+
+          <p>"Everyone should consider becoming a blood donor," Sarah encourages. "You never know when your donation might be the difference between life and death for someone else."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="bg-red-700 text-white py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <h3 class="text-xl font-semibold mb-4">🩸 BloodConnect</h3>
+        <p class="text-red-200 mb-4">Connecting donors with those in need, one drop at a time.</p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-red-200 hover:text-white transition text-xl"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="../index.html" class="text-red-200 hover:text-white transition">Home</a></li>
+          <li><a href="../index.html#about" class="text-red-200 hover:text-white transition">About</a></li>
+          <li><a href="news.html" class="text-red-200 hover:text-white transition">News & Blog</a></li>
+          <li><a href="../index.html#search" class="text-red-200 hover:text-white transition">Find Blood</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Support</h3>
+        <ul class="space-y-2">
+          <li><a href="contact.html" class="text-red-200 hover:text-white transition">Contact Us</a></li>
+          <li><a href="faq.html" class="text-red-200 hover:text-white transition">Help Center</a></li>
+          <li><a href="#" class="text-red-200 hover:text-white transition">Emergency Hotline</a></li>
+          <li><a href="privacy-policy.html" class="text-red-200 hover:text-white transition">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-4">Get Started</h3>
+        <ul class="space-y-2">
+          <li><a href="register.html" class="text-red-200 hover:text-white transition">Become a Donor</a></li>
+          <li><a href="login.html" class="text-red-200 hover:text-white transition">Hospital Login</a></li>
+          <li><a href="hospital-register.html" class="text-red-200 hover:text-white transition">Partner With Us</a></li>
+          <li><a href="#" class="text-red-200 hover:text-white transition">Download App</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-red-600 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p>© 2026 BloodConnect. All rights reserved.</p>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <a href="terms-of-service.html" class="text-red-200 hover:text-white transition text-sm">Terms of Service</a>
+        <a href="privacy-policy.html" class="text-red-200 hover:text-white transition text-sm">Privacy Policy</a>
+        <a href="#" class="text-red-200 hover:text-white transition text-sm">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/script.js"></script>
+<script>
+function closeModal() {
+  document.getElementById('articleModal').classList.add('hidden');
+}
+
+// Show modal when clicking on featured article
+document.querySelector('a[href="#article1"]').addEventListener('click', function(e) {
+  e.preventDefault();
+  document.getElementById('articleModal').classList.remove('hidden');
+});
+</script>
+</body>
+</html>

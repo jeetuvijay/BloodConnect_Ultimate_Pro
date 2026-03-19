@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-100 fade-in">
+
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="admin-dashboard.html" class="hover:text-red-200 transition">Admin</a>
+      <a href="donor-dashboard.html" class="hover:text-red-200 transition">Donor</a>
+      <a href="hospital-dashboard.html" class="hover:text-red-200 transition">Hospital</a>
+      <a href="analytics.html" class="hover:text-red-200 transition">Analytics</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="admin-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Admin</a>
+    <a href="donor-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Donor</a>
+    <a href="hospital-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Hospital</a>
+    <a href="analytics.html" class="block px-4 py-2 hover:bg-red-600 transition">Analytics</a>
+  </div>
+</nav>
+
+
+<div class="p-8 mt-16">
+<canvas id="donationChart"></canvas>
+</div>
+
+<script>
+new Chart(document.getElementById('donationChart'), {
+  type: 'line',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr'],
+    datasets: [{
+      label: 'Monthly Donations',
+      data: [20, 35, 50, 40],
+      borderColor: '#ef4444',
+      fill: false
+    }]
+  }
+});
+</script>
+
+<script src="../js/script.js"></script>
+</body>
+</html>

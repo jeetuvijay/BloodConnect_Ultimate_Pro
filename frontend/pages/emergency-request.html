@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency Blood Request - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-red-50 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="admin-dashboard.html" class="hover:text-red-200 transition">Admin</a>
+      <a href="donor-dashboard.html" class="hover:text-red-200 transition">Donor</a>
+      <a href="hospital-dashboard.html" class="hover:text-red-200 transition">Hospital</a>
+      <a href="analytics.html" class="hover:text-red-200 transition">Analytics</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="admin-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Admin</a>
+    <a href="donor-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Donor</a>
+    <a href="hospital-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Hospital</a>
+    <a href="analytics.html" class="block px-4 py-2 hover:bg-red-600 transition">Analytics</a>
+  </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8 mt-16">
+  <!-- Emergency Header -->
+  <div class="bg-red-600 text-white p-8 rounded-xl shadow-lg mb-8">
+    <div class="flex items-center mb-4">
+      <div class="text-5xl mr-4">🚨</div>
+      <div>
+        <h1 class="text-3xl font-bold">Emergency Blood Request</h1>
+        <p class="text-red-100 mt-2">Critical blood shortage - we need your help immediately</p>
+      </div>
+    </div>
+    <div class="bg-red-700 p-4 rounded-lg">
+      <p class="text-sm">
+        <strong>24/7 Emergency Hotline:</strong> +1 (555) 123-4567 |
+        <strong>Response Time:</strong> Usually within 30 minutes
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Request Form -->
+    <div class="bg-white p-8 rounded-xl shadow-lg">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">Submit Emergency Request</h2>
+
+      <form id="emergencyForm">
+        <!-- Hospital Information -->
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-4 text-gray-800">Hospital Information</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Hospital Name *</label>
+              <input type="text" id="hospitalName" placeholder="Enter hospital name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Contact Person *</label>
+              <input type="text" id="contactPerson" placeholder="Dr. John Smith" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+              <input type="tel" id="hospitalPhone" placeholder="+1 (555) 123-4567" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+              <input type="email" id="hospitalEmail" placeholder="emergency@hospital.com" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Hospital Address *</label>
+            <textarea id="hospitalAddress" rows="3" placeholder="Full hospital address" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required></textarea>
+          </div>
+        </div>
+
+        <!-- Blood Requirements -->
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-4 text-gray-800">Blood Requirements</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Blood Type Needed *</label>
+              <select id="bloodType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+                <option value="">Select blood type</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Units Required *</label>
+              <input type="number" id="unitsRequired" min="1" max="10" placeholder="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Urgency Level *</label>
+            <select id="urgencyLevel" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+              <option value="">Select urgency</option>
+              <option value="critical">Critical - Immediate (within 1 hour)</option>
+              <option value="urgent">Urgent - Within 6 hours</option>
+              <option value="high">High - Within 24 hours</option>
+              <option value="medium">Medium - Within 72 hours</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Patient Information -->
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-4 text-gray-800">Patient Information</h3>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Patient ID/Name (Optional)</label>
+            <input type="text" id="patientInfo" placeholder="Patient identifier or name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Reason for Request *</label>
+            <select id="requestReason" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" required>
+              <option value="">Select reason</option>
+              <option value="surgery">Emergency Surgery</option>
+              <option value="accident">Accident/Trauma</option>
+              <option value="cancer">Cancer Treatment</option>
+              <option value="anemia">Severe Anemia</option>
+              <option value="transplant">Organ Transplant</option>
+              <option value="other">Other Medical Emergency</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Additional Details</label>
+            <textarea id="additionalDetails" rows="4" placeholder="Provide any additional medical details that may help in finding suitable donors..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+
+        <!-- Terms and Submit -->
+        <div class="mb-6">
+          <label class="flex items-start">
+            <input type="checkbox" id="terms" class="mt-1 mr-2" required>
+            <span class="text-sm text-gray-600">
+              I confirm that this is a legitimate medical emergency and all information provided is accurate.
+              I understand that BloodConnect will use this information to locate suitable donors.
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-red-600 text-white py-4 rounded-lg font-semibold hover:bg-red-700 transition duration-200 text-lg">
+          <span id="submitText">🚨 Submit Emergency Request</span>
+          <div class="loading hidden" id="submitLoading"></div>
+        </button>
+      </form>
+    </div>
+
+    <!-- Information Panel -->
+    <div class="space-y-6">
+      <!-- Current Status -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Current Blood Shortages</h3>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center p-3 bg-red-50 rounded">
+            <span class="font-semibold text-red-800">O- (Universal Donor)</span>
+            <span class="text-red-600 font-bold">Critical Shortage</span>
+          </div>
+          <div class="flex justify-between items-center p-3 bg-orange-50 rounded">
+            <span class="font-semibold text-orange-800">A+</span>
+            <span class="text-orange-600 font-bold">Low Stock</span>
+          </div>
+          <div class="flex justify-between items-center p-3 bg-yellow-50 rounded">
+            <span class="font-semibold text-yellow-800">B-</span>
+            <span class="text-yellow-600 font-bold">Limited</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Emergency Response</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-red-600">24/7</div>
+            <div class="text-sm text-gray-600">Available</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-blue-600">30min</div>
+            <div class="text-sm text-gray-600">Avg Response</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-green-600">95%</div>
+            <div class="text-sm text-gray-600">Success Rate</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-purple-600">500+</div>
+            <div class="text-sm text-gray-600">Donors Ready</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Emergency Contacts</h3>
+        <div class="space-y-3">
+          <div class="flex items-center">
+            <i class="fas fa-phone text-red-600 mr-3"></i>
+            <div>
+              <div class="font-semibold">Emergency Hotline</div>
+              <div class="text-gray-600">+1 (555) 123-4567</div>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <i class="fas fa-envelope text-blue-600 mr-3"></i>
+            <div>
+              <div class="font-semibold">Emergency Email</div>
+              <div class="text-gray-600">emergency@bloodconnect.com</div>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <i class="fas fa-map-marker-alt text-green-600 mr-3"></i>
+            <div>
+              <div class="font-semibold">Blood Bank Locator</div>
+              <div class="text-gray-600">Find nearest blood bank</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Success Stories -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Recent Success Stories</h3>
+        <div class="space-y-3">
+          <div class="p-3 bg-green-50 rounded">
+            <div class="text-sm font-semibold text-green-800">Emergency Surgery Success</div>
+            <div class="text-xs text-gray-600">Found compatible donor within 45 minutes</div>
+          </div>
+          <div class="p-3 bg-blue-50 rounded">
+            <div class="text-sm font-semibold text-blue-800">Accident Victim Saved</div>
+            <div class="text-xs text-gray-600">Multiple donors responded to urgent call</div>
+          </div>
+          <div class="p-3 bg-purple-50 rounded">
+            <div class="text-sm font-semibold text-purple-800">Cancer Treatment Support</div>
+            <div class="text-xs text-gray-600">Regular supply maintained for 6 months</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script>
+document.getElementById('emergencyForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  // Get form data
+  const formData = {
+    hospitalName: document.getElementById('hospitalName').value,
+    contactPerson: document.getElementById('contactPerson').value,
+    hospitalPhone: document.getElementById('hospitalPhone').value,
+    hospitalEmail: document.getElementById('hospitalEmail').value,
+    hospitalAddress: document.getElementById('hospitalAddress').value,
+    bloodType: document.getElementById('bloodType').value,
+    unitsRequired: document.getElementById('unitsRequired').value,
+    urgencyLevel: document.getElementById('urgencyLevel').value,
+    patientInfo: document.getElementById('patientInfo').value,
+    requestReason: document.getElementById('requestReason').value,
+    additionalDetails: document.getElementById('additionalDetails').value,
+    terms: document.getElementById('terms').checked
+  };
+
+  // Validate required fields
+  const requiredFields = ['hospitalName', 'contactPerson', 'hospitalPhone', 'hospitalEmail', 'hospitalAddress', 'bloodType', 'unitsRequired', 'urgencyLevel', 'requestReason'];
+  const missingFields = requiredFields.filter(field => !formData[field]);
+
+  if (missingFields.length > 0) {
+    showAlert('Please fill in all required fields.', 'error');
+    return;
+  }
+
+  if (!formData.terms) {
+    showAlert('Please accept the terms and conditions.', 'error');
+    return;
+  }
+
+  // Show loading
+  document.getElementById('submitText').classList.add('hidden');
+  document.getElementById('submitLoading').classList.remove('hidden');
+
+  // Simulate processing
+  setTimeout(() => {
+    showAlert('🚨 Emergency request submitted successfully! Our team will contact you within 30 minutes.', 'success');
+
+    // Reset form
+    this.reset();
+
+    // Hide loading
+    document.getElementById('submitText').classList.remove('hidden');
+    document.getElementById('submitLoading').classList.add('hidden');
+
+    // Optional: Redirect to confirmation page
+    setTimeout(() => {
+      showAlert('Our emergency response team has been notified. Please keep your phone line open for immediate callback.');
+    }, 2000);
+
+  }, 3000);
+});
+
+// Auto-fill hospital information if user is logged in (mock)
+document.addEventListener('DOMContentLoaded', function() {
+  // In a real app, this would check if user is logged in as hospital admin
+  const mockHospitalData = {
+    hospitalName: 'City General Hospital',
+    contactPerson: 'Dr. Sarah Johnson',
+    hospitalPhone: '+1 (555) 123-4567',
+    hospitalEmail: 'emergency@citygeneral.com',
+    hospitalAddress: '123 Medical Center Dr, New York, NY 10001'
+  };
+
+  // Uncomment to auto-fill for demo
+  // Object.keys(mockHospitalData).forEach(key => {
+  //   const element = document.getElementById(key);
+  //   if (element) element.value = mockHospitalData[key];
+  // });
+});
+</script>
+</body>
+</html>

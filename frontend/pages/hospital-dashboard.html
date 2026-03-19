@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Dashboard - BloodConnect</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-100 fade-in">
+
+<nav class="bg-red-700 text-white p-4 shadow-lg fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-xl font-bold">🩸 BloodConnect</div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="../index.html" class="hover:text-red-200 transition">Home</a>
+      <a href="admin-dashboard.html" class="hover:text-red-200 transition">Admin</a>
+      <a href="donor-dashboard.html" class="hover:text-red-200 transition">Donor</a>
+      <a href="hospital-dashboard.html" class="hover:text-red-200 transition">Hospital</a>
+      <a href="analytics.html" class="hover:text-red-200 transition">Analytics</a>
+      <button onclick="toggleDarkMode()" class="bg-white text-red-700 px-3 py-1 rounded hover:bg-gray-100 transition" id="darkModeBtn">🌙</button>
+    </div>
+    <button class="md:hidden text-white text-2xl" onclick="toggleMobileMenu()" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="md:hidden bg-red-800 mt-4 rounded-lg hidden" id="mobileMenu">
+    <a href="../index.html" class="block px-4 py-2 hover:bg-red-600 transition">Home</a>
+    <a href="admin-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Admin</a>
+    <a href="donor-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Donor</a>
+    <a href="hospital-dashboard.html" class="block px-4 py-2 hover:bg-red-600 transition">Hospital</a>
+    <a href="analytics.html" class="block px-4 py-2 hover:bg-red-600 transition">Analytics</a>
+  </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8 mt-16">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">City General Hospital Dashboard</h1>
+    <p class="text-gray-600">Manage your blood inventory and requests</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Total Units</h3>
+          <p class="text-2xl font-bold text-red-600" id="totalUnits">156</p>
+          <p class="text-sm text-green-600 mt-1">+12 today</p>
+        </div>
+        <div class="text-4xl">🩸</div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Active Requests</h3>
+          <p class="text-2xl font-bold text-red-600" id="activeRequests">8</p>
+          <p class="text-sm text-orange-600 mt-1">3 urgent</p>
+        </div>
+        <div class="text-4xl">📋</div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Low Stock</h3>
+          <p class="text-2xl font-bold text-orange-600" id="lowStock">3</p>
+          <p class="text-sm text-gray-600 mt-1">types</p>
+        </div>
+        <div class="text-4xl">⚠️</div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Donations Today</h3>
+          <p class="text-2xl font-bold text-green-600" id="donationsToday">12</p>
+          <p class="text-sm text-green-600 mt-1">+3 from yesterday</p>
+        </div>
+        <div class="text-4xl">❤️</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-gray-800">Blood Inventory</h3>
+        <button onclick="updateInventory()" class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition">
+          <i class="fas fa-edit mr-1"></i>Update
+        </button>
+      </div>
+      <div class="space-y-3" id="inventoryList">
+        <div class="flex justify-between items-center p-3 bg-green-50 rounded">
+          <span class="font-semibold">A+</span>
+          <div class="flex items-center space-x-2">
+            <span class="text-green-800 font-bold">12 Units</span>
+            <div class="w-20 bg-gray-200 rounded-full h-2">
+              <div class="bg-green-500 h-2 rounded-full" style="width: 80%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-green-50 rounded">
+          <span class="font-semibold">B+</span>
+          <div class="flex items-center space-x-2">
+            <span class="text-green-800 font-bold">8 Units</span>
+            <div class="w-20 bg-gray-200 rounded-full h-2">
+              <div class="bg-green-500 h-2 rounded-full" style="width: 60%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-yellow-50 rounded">
+          <span class="font-semibold">O-</span>
+          <div class="flex items-center space-x-2">
+            <span class="text-yellow-800 font-bold">1 Unit (Low)</span>
+            <div class="w-20 bg-gray-200 rounded-full h-2">
+              <div class="bg-yellow-500 h-2 rounded-full" style="width: 20%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-green-50 rounded">
+          <span class="font-semibold">AB+</span>
+          <div class="flex items-center space-x-2">
+            <span class="text-green-800 font-bold">6 Units</span>
+            <div class="w-20 bg-gray-200 rounded-full h-2">
+              <div class="bg-green-500 h-2 rounded-full" style="width: 50%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-red-50 rounded">
+          <span class="font-semibold">O+</span>
+          <div class="flex items-center space-x-2">
+            <span class="text-red-800 font-bold">0 Units (Critical)</span>
+            <div class="w-20 bg-gray-200 rounded-full h-2">
+              <div class="bg-red-500 h-2 rounded-full" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button onclick="requestEmergencySupply()" class="mt-4 w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition">
+        <i class="fas fa-exclamation-triangle mr-2"></i>Request Emergency Supply
+      </button>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-gray-800">Recent Requests</h3>
+        <button onclick="viewAllRequests()" class="text-red-600 hover:text-red-800 text-sm font-semibold">View All</button>
+      </div>
+      <div class="space-y-4" id="recentRequests">
+        <div class="p-4 border border-red-200 rounded bg-red-50">
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="font-semibold text-red-800">Emergency: O+ Blood</h4>
+            <span class="bg-red-600 text-white px-2 py-1 rounded text-xs">URGENT</span>
+          </div>
+          <p class="text-sm text-gray-600">Patient: John Smith, Surgery required</p>
+          <p class="text-sm text-gray-600">Requested: 2 hours ago</p>
+          <div class="mt-2 flex space-x-2">
+            <button onclick="fulfillRequest('O+', 'John Smith')" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition">
+              <i class="fas fa-check mr-1"></i>Fulfill
+            </button>
+            <button onclick="contactDonorForRequest('O+')" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
+              <i class="fas fa-phone mr-1"></i>Contact Donor
+            </button>
+          </div>
+        </div>
+        <div class="p-4 border border-yellow-200 rounded bg-yellow-50">
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="font-semibold text-yellow-800">A- Blood Needed</h4>
+            <span class="bg-yellow-600 text-white px-2 py-1 rounded text-xs">MEDIUM</span>
+          </div>
+          <p class="text-sm text-gray-600">Patient: Emergency case</p>
+          <p class="text-sm text-gray-600">Requested: 4 hours ago</p>
+          <div class="mt-2 flex space-x-2">
+            <button onclick="fulfillRequest('A-', 'Emergency case')" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition">
+              <i class="fas fa-check mr-1"></i>Fulfill
+            </button>
+            <button onclick="contactDonorForRequest('A-')" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
+              <i class="fas fa-phone mr-1"></i>Contact Donor
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold text-gray-800">Today's Schedule</h3>
+      <button onclick="addNewAppointment()" class="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700 transition">
+        <i class="fas fa-plus mr-1"></i>Add Appointment
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="px-4 py-2 text-left">Time</th>
+            <th class="px-4 py-2 text-left">Donor</th>
+            <th class="px-4 py-2 text-left">Blood Type</th>
+            <th class="px-4 py-2 text-left">Status</th>
+            <th class="px-4 py-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleTable">
+          <tr class="border-t">
+            <td class="px-4 py-2">9:00 AM</td>
+            <td class="px-4 py-2">Sarah Johnson</td>
+            <td class="px-4 py-2">O+</td>
+            <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Completed</span></td>
+            <td class="px-4 py-2">
+              <button onclick="viewDonorDetails('Sarah Johnson')" class="text-blue-600 hover:text-blue-800 text-sm">
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+          <tr class="border-t">
+            <td class="px-4 py-2">10:30 AM</td>
+            <td class="px-4 py-2">Mike Chen</td>
+            <td class="px-4 py-2">A-</td>
+            <td class="px-4 py-2"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">In Progress</span></td>
+            <td class="px-4 py-2">
+              <button onclick="viewDonorDetails('Mike Chen')" class="text-blue-600 hover:text-blue-800 text-sm">
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+          <tr class="border-t">
+            <td class="px-4 py-2">2:00 PM</td>
+            <td class="px-4 py-2">Emma Davis</td>
+            <td class="px-4 py-2">B+</td>
+            <td class="px-4 py-2"><span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">Scheduled</span></td>
+            <td class="px-4 py-2">
+              <button onclick="viewDonorDetails('Emma Davis')" class="text-blue-600 hover:text-blue-800 text-sm">
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+          <tr class="border-t">
+            <td class="px-4 py-2">3:30 PM</td>
+            <td class="px-4 py-2">David Wilson</td>
+            <td class="px-4 py-2">AB+</td>
+            <td class="px-4 py-2"><span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">Scheduled</span></td>
+            <td class="px-4 py-2">
+              <button onclick="viewDonorDetails('David Wilson')" class="text-blue-600 hover:text-blue-800 text-sm">
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow">
+    <h3 class="text-xl font-bold mb-4 text-gray-800">Quick Actions</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <button onclick="createBloodRequest()" class="p-4 bg-red-50 rounded-lg hover:bg-red-100 transition text-center">
+        <i class="fas fa-plus-circle text-2xl text-red-600 mb-2"></i>
+        <p class="text-sm font-semibold">New Request</p>
+      </button>
+      <button onclick="viewNearbyDonors()" class="p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-center">
+        <i class="fas fa-map-marker-alt text-2xl text-blue-600 mb-2"></i>
+        <p class="text-sm font-semibold">Nearby Donors</p>
+      </button>
+      <button onclick="generateReport()" class="p-4 bg-green-50 rounded-lg hover:bg-green-100 transition text-center">
+        <i class="fas fa-chart-bar text-2xl text-green-600 mb-2"></i>
+        <p class="text-sm font-semibold">Reports</p>
+      </button>
+      <button onclick="contactSupport()" class="p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition text-center">
+        <i class="fas fa-headset text-2xl text-purple-600 mb-2"></i>
+        <p class="text-sm font-semibold">Support</p>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script>
+function requestEmergencySupply() {
+  showAlert('Emergency supply request sent! Our team will contact you shortly.');
+}
+
+function fulfillRequest(bloodType, patient) {
+  showAlert(`Request fulfilled for ${patient} (${bloodType})`);
+}
+
+function contactDonorForRequest(bloodType) {
+  showAlert(`Finding available ${bloodType} donors...`);
+  setTimeout(() => {
+    window.location.href = 'nearby-donors.html?bloodType=' + encodeURIComponent(bloodType);
+  }, 1000);
+}
+
+function updateInventory() {
+  showAlert('Opening inventory management...');
+}
+
+function viewAllRequests() {
+  showAlert('Loading all requests...');
+}
+
+function addNewAppointment() {
+  showAlert('Opening appointment scheduler...');
+}
+
+function viewDonorDetails(donorName) {
+  showAlert(`Loading details for ${donorName}...`);
+}
+
+function createBloodRequest() {
+  showAlert('Opening blood request form...');
+}
+
+function viewNearbyDonors() {
+  window.location.href = 'nearby-donors.html';
+}
+
+function generateReport() {
+  showAlert('Generating monthly report...');
+}
+
+function contactSupport() {
+  window.location.href = 'contact.html';
+}
+</script>
+</body>
+</html>
